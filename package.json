@@ -1,0 +1,37 @@
+{
+    "name": "carmelle-dev/tidy-cli",
+    "version": "0.1.0",
+    "description": "CLI pour ranger automatiquement un dossier par type de fichier ou par date",
+    "type": "module",
+    "bin": {
+        "tidy": "./bin/tidy.js"
+    },
+    "files": [
+        "bin",
+        "src"
+    ],
+    "scripts": {
+        "start": "node bin/tidy.js",
+        "test": "vitest run",
+        "test:watch": "vitest"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "packagManager": "pnpm@10.0.0",
+    "Keywords": [
+        "cli",
+        "organize",
+        "files",
+        "downloads",
+        "tidy"
+    ],
+    "author": "carmelle-dev",
+    "license": "MIT",
+    "dependencies": {
+        "commander": "^15.1.0"
+    },
+    "devDependencies": {
+        "vitest": "^5.1.0"
+    }
+}
