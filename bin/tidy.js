@@ -3,6 +3,7 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { buildPlan } from '../src/scanner.js';
 import { executePlan } from '../src/mover.js';
+import { countByDestination } from '../src/summary.js';
 
 // Lire la version dans package.json (pour ne pas la recopier à la main)
 const require = createRequire(import.meta.url);
@@ -15,8 +16,8 @@ program
   .description('Range automatiquement un dossier par type de fichier ou par date')
   .version(version) // ajoute automatiquement --version
   .argument('<folder>', 'dossier à ranger') // <...> = obligatoire
-  .option('--by-date', 'ranger par année et par mois') // devient options.byDate
-    .action(async (folder, options) => {
+  .option('-n, --dry-run', 'simuler le rangement sans rien déplacer')
+  .action(async (folder, options) => {
     try {
       const root = path.resolve(folder);
       const plan = await buildPlan(root, { byDate: options.byDate });
@@ -26,14 +27,25 @@ program
         return;
       }
 
-      const moves = await executePlan(root, plan);
+      const dryRun = Boolean(options.dryRun);
+      const moves = await executePlan(root, plan, { dryRun });
 
+      const prefix = dryRun ? '[simulation] ' : '';
       for (const { from, to } of moves) {
-        console.log(`${path.basename(from)}  →  ${path.relative(root, to)}`);
+        console.log(`${prefix}${path.basename(from)}  →  ${path.relative(root, to)}`);
       }
 
-      const folderCount = new Set(plan.map((item) => item.destination)).size;
-      console.log(`\n${moves.length} fichier(s) rangé(s) dans ${folderCount} dossier(s).`);
+      console.log('\nRésumé :');
+      for (const [destination, count] of countByDestination(plan)) {
+        console.log(`  ${destination.padEnd(20)} ${count} fichier(s)`);
+      }
+
+      const verb = dryRun ? 'seraient rangé(s)' : 'rangé(s)';
+      console.log(`\n${moves.length} fichier(s) ${verb}.`);
+
+      if (dryRun) {
+        console.log("Aucun fichier n'a été déplacé. Relance sans --dry-run pour ranger.");
+      }
     } catch (error) {
       console.error(`Erreur : ${error.message}`);
       process.exit(1);
