@@ -24,6 +24,19 @@ describe('classifyByType', () => {
     it('envoie les fichiers sans extensions dans Autres', () => {
         expect(classifyByType('LICENSE')).toBe('Autres');
     });
+
+      it('reconnaît les fichiers React/TypeScript comme du code', () => {
+    expect(classifyByType('show.tsx')).toBe('Code');
+    expect(classifyByType('App.jsx')).toBe('Code');
+  });
+
+  it('reconnaît les archives .tar.xz', () => {
+    expect(classifyByType('tsetup.6.5.1.tar.xz')).toBe('Archives');
+  });
+
+  it('reconnaît les installateurs .run', () => {
+    expect(classifyByType('xampp-installer.run')).toBe('Programmes');
+  });
 });
 
 describe('classifyByDate', () => {
