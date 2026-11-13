@@ -48,7 +48,7 @@ describe('CLI tidy', () => {
     const { stdout } = await run(process.execPath, [CLI, dir]);
 
     expect(stdout).toContain(`photo.jpg  →  ${path.join('Images', 'photo.jpg')}`);
-    expect(stdout).toContain('1 fichier(s) rangé(s) dans 1 dossier(s).');
+    expect(stdout).toContain('1 fichier(s) rangé(s).');
     await expect(fs.access(path.join(dir, 'Images', 'photo.jpg'))).resolves.toBeUndefined();
   });
 

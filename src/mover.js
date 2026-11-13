@@ -1,60 +1,62 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
+/** Renvoie true si un fichier ou dossier existe à ce chemin. */
 async function exists(filePath) {
-    try {
-        await fs.access(filePath);
-        return true;
-    } catch {
-        return false;
-    }
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /**
- * Renvoie un chemin libre : "photo.jpg", sinon "photo (1).jpg", "phot (2).jpg" ...
+ * Renvoie un chemin libre : "photo.jpg", sinon "photo (1).jpg", "photo (2).jpg"...
  * @param {string} targetPath
  * @returns {Promise<string>}
  */
-
-
 export async function getAvailablePath(targetPath) {
-    const { dir, name, ext } = path.parse(targetPath);
+  const { dir, name, ext } = path.parse(targetPath);
 
-let candidate = targetPath;
-let counter = 1;
+  let candidate = targetPath;
+  let counter = 1;
 
-while (await exists(candidate)) {
+  while (await exists(candidate)) {
     candidate = path.join(dir, `${name} (${counter})${ext}`);
     counter++;
+  }
 
+  return candidate;
 }
- return candidate;
-}
-
-
-
 
 /**
- * Exécute un plan de rangement : crée les dossiers déplace les fichiers.
- * @param  {string} folder - le dossier rangé
- * @param {Array<{ file: string, destination: string }>} plan 
+ * Exécute un plan de rangement : crée les dossiers et déplace les fichiers.
+ * En mode dryRun, calcule les destinations exactes sans rien modifier.
+ * @param {string} folder - le dossier rangé
+ * @param {Array<{ file: string, destination: string }>} plan
+ * @param {{ dryRun?: boolean }} options
  * @returns {Promise<Array<{ from: string, to: string }>>} les déplacements effectués
- 
  */
-export async function executePlan(folder, plan) {
-    const moves = [];
+export async function executePlan(folder, plan, { dryRun = false } = {}) {
+  const moves = [];
 
-    for (const {file, destination } of plan)
- {
+  for (const { file, destination } of plan) {
     const from = path.join(folder, file);
     const targetDir = path.join(folder, destination);
 
-    await fs.mkdir(targetDir, { recursive: true});
+    if (!dryRun) {
+      await fs.mkdir(targetDir, { recursive: true });
+    }
 
     const to = await getAvailablePath(path.join(targetDir, file));
-    await fs.rename(from, to);
 
-    moves.push({ from, to});
- }
- return moves;
+    if (!dryRun) {
+      await fs.rename(from, to);
+    }
+
+    moves.push({ from, to });
+  }
+
+  return moves;
 }
