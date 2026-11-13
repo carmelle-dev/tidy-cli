@@ -11,35 +11,31 @@ export async function exists(filePath) {
 }
 
 /**
- * Renvoie un chemin libre : "photo.jpg", sinon "photo (1).jpg", "phot (2).jpg" ...
+ * Renvoie un chemin libre : "photo.jpg", sinon "photo (1).jpg", "photo (2).jpg"...
  * @param {string} targetPath
  * @returns {Promise<string>}
  */
-
-
 export async function getAvailablePath(targetPath) {
-    const { dir, name, ext } = path.parse(targetPath);
+  const { dir, name, ext } = path.parse(targetPath);
 
-let candidate = targetPath;
-let counter = 1;
+  let candidate = targetPath;
+  let counter = 1;
 
-while (await exists(candidate)) {
+  while (await exists(candidate)) {
     candidate = path.join(dir, `${name} (${counter})${ext}`);
     counter++;
+  }
 
+  return candidate;
 }
- return candidate;
-}
-
-
-
 
 /**
- * Exécute un plan de rangement : crée les dossiers déplace les fichiers.
- * @param  {string} folder - le dossier rangé
- * @param {Array<{ file: string, destination: string }>} plan 
+ * Exécute un plan de rangement : crée les dossiers et déplace les fichiers.
+ * En mode dryRun, calcule les destinations exactes sans rien modifier.
+ * @param {string} folder - le dossier rangé
+ * @param {Array<{ file: string, destination: string }>} plan
+ * @param {{ dryRun?: boolean }} options
  * @returns {Promise<Array<{ from: string, to: string }>>} les déplacements effectués
- 
  */
 export async function executePlan(folder, plan, { dryRun = false } = {}) {
   const moves = [];
