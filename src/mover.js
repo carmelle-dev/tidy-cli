@@ -41,20 +41,25 @@ while (await exists(candidate)) {
  * @returns {Promise<Array<{ from: string, to: string }>>} les déplacements effectués
  
  */
-export async function executePlan(folder, plan) {
-    const moves = [];
+export async function executePlan(folder, plan, { dryRun = false } = {}) {
+  const moves = [];
 
-    for (const {file, destination } of plan)
- {
+  for (const { file, destination } of plan) {
     const from = path.join(folder, file);
     const targetDir = path.join(folder, destination);
 
-    await fs.mkdir(targetDir, { recursive: true});
+    if (!dryRun) {
+      await fs.mkdir(targetDir, { recursive: true });
+    }
 
     const to = await getAvailablePath(path.join(targetDir, file));
-    await fs.rename(from, to);
 
-    moves.push({ from, to});
- }
- return moves;
+    if (!dryRun) {
+      await fs.rename(from, to);
+    }
+
+    moves.push({ from, to });
+  }
+
+  return moves;
 }
