@@ -53,7 +53,7 @@ program
       const plan = await buildPlan(root, { byDate: options.byDate });
 
       if (plan.length === 0) {
-        console.log('Rien à ranger, le dossier est déjà propre ✨');
+        console.log('Rien à ranger, le dossier est déjà propre');
         return;
       }
 
