@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-async function exists(filePath) {
+export async function exists(filePath) {
     try {
         await fs.access(filePath);
         return true;
