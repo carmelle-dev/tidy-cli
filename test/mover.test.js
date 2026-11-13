@@ -40,6 +40,28 @@ describe('mover', () => {
   });
 
   describe('executePlan', () => {
+
+        it('ne déplace rien en mode dryRun', async () => {
+      await fs.writeFile(path.join(dir, 'photo.jpg'), '');
+
+      await executePlan(dir, [{ file: 'photo.jpg', destination: 'Images' }], { dryRun: true });
+
+      await expect(fs.access(path.join(dir, 'photo.jpg'))).resolves.toBeUndefined();
+      await expect(fs.access(path.join(dir, 'Images'))).rejects.toThrow();
+    });
+
+    it('prédit les renommages en mode dryRun', async () => {
+      await fs.mkdir(path.join(dir, 'Images'));
+      await fs.writeFile(path.join(dir, 'Images', 'photo.jpg'), '');
+      await fs.writeFile(path.join(dir, 'photo.jpg'), '');
+
+      const moves = await executePlan(dir, [{ file: 'photo.jpg', destination: 'Images' }], {
+        dryRun: true,
+      });
+
+      expect(moves[0].to).toBe(path.join(dir, 'Images', 'photo (1).jpg'));
+    });
+    
     it('déplace les fichiers et crée les dossiers', async () => {
       await fs.writeFile(path.join(dir, 'photo.jpg'), '');
       await fs.writeFile(path.join(dir, 'cv.pdf'), '');

@@ -32,6 +32,16 @@ describe('CLI tidy', () => {
     expect(stdout.trim()).toBe(pkg.version);
   });
 
+    it('ne déplace rien avec --dry-run', async () => {
+    await fs.writeFile(path.join(dir, 'photo.jpg'), '');
+
+    const { stdout } = await run(process.execPath, [CLI, dir, '--dry-run']);
+
+    expect(stdout).toContain('[simulation] photo.jpg');
+    expect(stdout).toContain('seraient rangé(s)');
+    await expect(fs.access(path.join(dir, 'photo.jpg'))).resolves.toBeUndefined();
+  });
+
     it('range les fichiers et affiche le résultat', async () => {
     await fs.writeFile(path.join(dir, 'photo.jpg'), '');
 
