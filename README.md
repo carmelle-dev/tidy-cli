@@ -37,9 +37,9 @@ pnpm dlx @carmelle-dev/tidy-cli ~/Téléchargements -n
 ## Utilisation
 
 ```bash
-tidy ~/Téléchargements -n      # 1. simuler : rien n'est déplacé
-tidy ~/Téléchargements         # 2. ranger
-tidy ~/Téléchargements -u      # 3. annuler si besoin
+tidy-cli ~/Téléchargements -n      # 1. simuler : rien n'est déplacé
+tidy-cli ~/Téléchargements         # 2. ranger
+tidy-cli ~/Téléchargements -u      # 3. annuler si besoin
 ```
 
 ### Options
@@ -52,12 +52,12 @@ tidy ~/Téléchargements -u      # 3. annuler si besoin
 | `-V, --version` | Affiche la version |
 | `-h, --help` | Affiche l'aide |
 
-Les options se combinent : `tidy ~/Téléchargements -u -n` simule une annulation.
+Les options se combinent : `tidy-cli ~/Téléchargements -u -n` simule une annulation.
 
 ### Exemple
 
 ```
-$ tidy ~/Téléchargements -n
+$ tidy-cli ~/Téléchargements -n
 
 [simulation] facture.pdf  →  Documents/facture.pdf
 [simulation] vacances.jpg  →  Images/vacances (1).jpg
@@ -87,9 +87,9 @@ Aucun fichier n'a été déplacé. Relance sans -n pour ranger.
 
 Les fichiers cachés (`.bashrc`…) et les dossiers existants ne sont jamais déplacés.
 
-## Comment tidy protège vos fichiers
+## Comment tidy-cli protège vos fichiers
 
-- **Jamais d'écrasement** : avant chaque déplacement, tidy vérifie que le nom est libre et ajoute `(1)`, `(2)`… si besoin.
+- **Jamais d'écrasement** : avant chaque déplacement, tidy-cli vérifie que le nom est libre et ajoute `(1)`, `(2)`… si besoin.
 - **Simulation fidèle** : le mode `-n` utilise exactement le même code que le vrai rangement et prédit même les renommages.
 - **Historique** : chaque rangement est enregistré dans un fichier caché `.tidy-history.json`, dans le dossier rangé. `--undo` l'utilise pour tout remettre en place, puis supprime les dossiers devenus vides (jamais ceux qui contiennent d'autres fichiers).
 
