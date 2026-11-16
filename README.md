@@ -1,8 +1,11 @@
 # tidy-cli
 
+[![npm](https://img.shields.io/npm/v/@carmelle-dev/tidy-cli)](https://www.npmjs.com/package/@carmelle-dev/tidy-cli)
 [![Tests](https://github.com/carmelle-dev/tidy-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/carmelle-dev/tidy-cli/actions/workflows/ci.yml)
-![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+![Node.js](https://img.shields.io/badge/node-%3E%3D22-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
+
+> Range automatiquement un dossier en désordre...
 
 > Range automatiquement un dossier en désordre (Téléchargements, Bureau…) par type de fichier ou par date, en une seule commande, **sans jamais perdre un fichier**.
 
@@ -17,16 +20,19 @@
 
 ## Installation
 
-Prérequis : [Node.js](https://nodejs.org) 20 ou plus et [pnpm](https://pnpm.io).
+Prérequis : [Node.js](https://nodejs.org) 22 ou plus et [pnpm](https://pnpm.io).
 
 ```bash
-git clone https://github.com/carmelle-dev/tidy-cli.git
-cd tidy-cli
-pnpm install
-pnpm link --global
+pnpm add -g @carmelle-dev/tidy-cli
 ```
 
-La commande `tidy` est maintenant disponible partout.
+Ou pour l'essayer sans l'installer :
+
+```bash
+pnpm dlx @carmelle-dev/tidy-cli ~/Téléchargements -n
+```
+
+> La première fois, si pnpm affiche une erreur sur le dossier global, lancez `pnpm setup` puis redémarrez le terminal.
 
 ## Utilisation
 
