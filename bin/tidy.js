@@ -78,7 +78,7 @@ program
       if (dryRun) {
         console.log("Aucun fichier n'a été déplacé. Relance sans -n pour ranger.");
       } else {
-        console.log('Pour annuler : tidy <dossier> --undo');
+        console.log('Pour annuler : tidy-cli <dossier> --undo');
       }
     } catch (error) {
       console.error(`Erreur : ${error.message}`);
