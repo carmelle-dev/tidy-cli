@@ -1,6 +1,6 @@
 {
     "name": "@carmelle-dev/tidy-cli",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "CLI pour ranger automatiquement un dossier par type de fichier ou par date",
     "type": "module",
     "bin": {
